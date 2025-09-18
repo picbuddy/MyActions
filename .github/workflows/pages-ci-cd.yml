@@ -3,7 +3,7 @@ name: CI & Deploy (Progressive Metrics)
 
 on:
   push:
-    branches: ["main", "feature/**", "fix/**"]   # 푸시 트리거
+    branches: ["main", "feature/**", "fix/**"]    # 푸시 트리거
   pull_request:                                   # PR에도 CI는 돌게
 
 # GitHub Pages 배포에 필요한 최소 권한
