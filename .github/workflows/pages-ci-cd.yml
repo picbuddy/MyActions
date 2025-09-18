@@ -48,7 +48,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: "pip"
+          # cache: "pip"
       - name: Build site (CSV -> HTML)         # 우리의 핵심 빌드 단계
         run: python tools/build_site.py        # site/index.html 생성
 
