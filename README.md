@@ -35,6 +35,22 @@ GitHub는 .github/workflows/ 디렉터리에 있는 YAML 파일들을 자동으�
    .github/workflows/pages-ci-cd.yml 파일 내용 붙여넣기/수정
    Commit changes 클릭
 
+# Github Pages setting
+
+- 리포지토리 Settings 탭 클릭
+- 왼쪽 메뉴에서 Pages 클릭
+- Build and deployment 섹션 확인
+- Source를 **“Deploy from a branch”**가 아니라 **“GitHub Actions”**으로 선택
+
+이렇게 해 두면 Actions에서 deploy-pages@v4가 실행될 때 Pages가 자동으로 활성화됩니다.
+Tip: 새 리포라면 기본적으로 “GitHub Actions” 모드가 비활성일 수 있어요. 반드시 확인하고 변경해 주세요.
+
+## 워크플로우가 하는 일
+우리가 만든 워크플로우는
+CI 검사(ci job) →
+mkdocs build나 build_site.py 같은 빌드 →
+**actions/upload-pages-artifact**로 Pages용 산출물을 업로드 → **actions/deploy-pages**로 Pages 환경에 자동 배포
+
 # Try
 1) 'metrics.py'에 'median(values)' 추가 후 push  
 2) (선택) 'tests/test_metrics.py'에 테스트도 추가  
