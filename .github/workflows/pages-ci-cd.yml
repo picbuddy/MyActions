@@ -27,7 +27,7 @@ jobs:
       - uses: actions/setup-python@v5         # 파이썬 설치
         with:
           python-version: "3.12"
-          cache: "pip"                        # (선택) pip 캐시
+          # cache: "pip"                        # (선택) pip 캐시
       # 여기선 외부 패키지가 없으므로 install 생략
       - name: Syntax check
         run: python -m compileall -q src
