@@ -35,7 +35,7 @@ GitHub는 .github/workflows/ 디렉터리에 있는 YAML 파일들을 자동으�
    .github/workflows/pages-ci-cd.yml 파일 내용 붙여넣기/수정
    Commit changes 클릭
 
-### Try
+# Try
 1) 'metrics.py'에 'median(values)' 추가 후 push  
 2) (선택) 'tests/test_metrics.py'에 테스트도 추가  
 3) Actions 성공 후, Pages에서 표에 새 행이 나타나는지 확인
