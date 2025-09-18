@@ -1,50 +1,62 @@
+# .github/workflows/pages-ci-cd.yml
 name: CI & Deploy (Progressive Metrics)
 
 on:
   push:
-    branches: ["main", "feature/**", "fix/**"]
-  pull_request:
+    branches: ["main", "feature/**", "fix/**"]   # 푸시 트리거
+  pull_request:                                   # PR에도 CI는 돌게
 
+# GitHub Pages 배포에 필요한 최소 권한
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Pages는 동시에 한 번만 배포 (중복 실행 취소)
 concurrency:
   group: "pages"
   cancel-in-progress: true
 
 jobs:
   ci:
+    name: Lint/Tests
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v4             # 코드 체크아웃
+      - uses: actions/setup-python@v5         # 파이썬 설치
         with:
           python-version: "3.12"
+          cache: "pip"                        # (선택) pip 캐시
+      # 여기선 외부 패키지가 없으므로 install 생략
       - name: Syntax check
         run: python -m compileall -q src
-      - name: Run tests (stdlib unittest)
+      - name: Run tests (unittest)
         run: python -m unittest discover -s tests -p "test_*.py" -v
 
   deploy:
-    needs: ci
+    name: Build & Deploy Pages
+    needs: ci                                  # CI 통과해야만 실행
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      name: github-pages                       # Pages 환경
+      url: ${{ steps.deploy.outputs.page_url }}# 배포 URL 노출
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Build site from CSV (dynamic metrics)
-        run: python tools/build_site.py
-      - name: Upload artifact
+          cache: "pip"
+      - name: Build site (CSV -> HTML)         # 우리의 핵심 빌드 단계
+        run: python tools/build_site.py        # site/index.html 생성
+
+      - name: Upload artifact                  # site/ 폴더 업로드
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
-      - name: Deploy to Pages
+
+      - name: Deploy to GitHub Pages           # 실제 배포
         id: deploy
         uses: actions/deploy-pages@v4
